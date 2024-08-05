@@ -22,9 +22,9 @@ const Workspace = () => {
 				aria-controls={open ? 'basic-menu-workspace' : undefined}
 				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}>
+				onClick={handleClick}
+				endIcon={<KeyboardArrowDownIcon />}>
 				Workspace
-				<KeyboardArrowDownIcon />
 			</Button>
 			<Menu
 				id='basic-menu-workspace'

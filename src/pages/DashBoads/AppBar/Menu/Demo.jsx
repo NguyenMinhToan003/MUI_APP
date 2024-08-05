@@ -22,9 +22,9 @@ const Demo = () => {
 				aria-controls={open ? 'basic-menu-demo' : undefined}
 				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}>
+				onClick={handleClick}
+				endIcon={<KeyboardArrowDownIcon />}>
 				demo
-				<KeyboardArrowDownIcon />
 			</Button>
 			<Menu
 				id='basic-menu-demo'

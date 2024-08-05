@@ -22,12 +22,8 @@ const Profile = () => {
 				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
 				onClick={handleClick}
-				sx={{ padding: 0, width: 'full-content' }}>
-				<Avatar
-					alt='Avatar'
-					src='../../../assets/kjptpp5h.jpg'
-					sx={{ width: 32, height: 32 }}
-				/>
+				sx={{ padding: 0, width: '30px', height: '30px' }}>
+				<Avatar alt='Avatar' src='../../../assets/kjptpp5h.jpg' />
 			</Button>
 			<Menu
 				id='basic-menu-profile'

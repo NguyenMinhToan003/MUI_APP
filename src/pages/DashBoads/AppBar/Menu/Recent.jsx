@@ -22,9 +22,9 @@ const Recent = () => {
 				aria-controls={open ? 'basic-menu-recent' : undefined}
 				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}>
+				onClick={handleClick}
+				endIcon={<KeyboardArrowDownIcon />}>
 				Recent
-				<KeyboardArrowDownIcon />
 			</Button>
 			<Menu
 				id='basic-menu-recent'

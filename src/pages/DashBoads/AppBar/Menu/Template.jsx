@@ -22,9 +22,9 @@ const Template = () => {
 				aria-controls={open ? 'basic-menu-template' : undefined}
 				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}>
+				onClick={handleClick}
+				endIcon={<KeyboardArrowDownIcon />}>
 				Template
-				<KeyboardArrowDownIcon />
 			</Button>
 			<Menu
 				id='basic-menu-template'

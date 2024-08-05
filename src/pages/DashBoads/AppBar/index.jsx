@@ -11,18 +11,21 @@ import Template from './Menu/Template';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Profile from './Menu/Profile';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 const AppBar = () => {
 	return (
 		<Box
 			sx={{
 				width: '100%',
-				padding: '10px',
+				padding: 2,
 				height: (theme) => theme.trello.appbarHeight,
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',
+				overflowX: 'auto',
+				overflowY: 'hidden',
 			}}>
-			<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+			<Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
 				<AppsIcon sx={{ fontSize: '2rem', color: 'primary.main' }} />
 				<Typography
 					variant='span'
@@ -51,6 +54,7 @@ const AppBar = () => {
 
 				<ThemeMode />
 				<NotificationsNoneIcon />
+				<HelpOutlineIcon />
 				<Profile />
 			</Box>
 		</Box>
