@@ -1,5 +1,7 @@
 import Box from '@mui/material/Box';
-import AddIcon from '@mui/icons-material/Add';
+import AddCardIcon from '@mui/icons-material/AddCard';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+
 import Button from '@mui/material/Button';
 const Footer = (props) => {
 	return (
@@ -8,17 +10,19 @@ const Footer = (props) => {
 				height: (theme) => theme.trello.columnFooterHeight,
 				width: '100%',
 				display: 'flex',
-				justifyContent: 'center',
+				justifyContent: 'space-between',
 				alignItems: 'center',
-				padding: '0 6px',
+				padding: '10px',
 			}}>
 			<Button
-				variant='contained'
-				color='primary'
-				startIcon={<AddIcon />}
-				sx={{ width: '100%', height: '100%', fontSize: '16px' }}>
+				sx={{
+					color: 'primary.main',
+					fontSize: '16px',
+				}}
+				startIcon={<AddCardIcon />}>
 				Add Card
 			</Button>
+			<DragHandleIcon sx={{ fontSize: '30px', cursor: 'pointer' }} />
 		</Box>
 	);
 };

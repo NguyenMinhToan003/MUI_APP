@@ -8,10 +8,10 @@ const theme = extendTheme({
 		boardbarHeight: '54px',
 		boardContentHeight: 'calc( 100vh - 60px - 54px )',
 		columnHeaderHeight: '60px',
-		columnFooterHeight: '54px',
-		columnContentHeight: 'calc(100vh - 60px - 54px  - 60px - 54px )',
+		columnFooterHeight: '60px',
+		columnContentHeight: 'calc(100vh - 60px - 54px  - 60px - 60px )',
 	},
-	// Define color schemes for light and dark modes
+
 	colorSchemes: {
 		light: {
 			palette: {
@@ -44,24 +44,24 @@ const theme = extendTheme({
 	},
 	// Override styles for specific components
 	components: {
-		'@global': {
-			// Customize scrollbar styles globally
-			'*::-webkit-scrollbar': {
-				width: '0.4em',
-			},
-			'*::-webkit-scrollbar-track': {
-				'-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
-			},
-			'*::-webkit-scrollbar-thumb': {
-				backgroundColor: 'rgba(0,0,0,.1)',
-				outline: '1px solid slategrey',
+		MuiCssBaseline: {
+			styleOverrides: {
+				'*::-webkit-scrollbar': {
+					width: '2px',
+					backgroundColor: 'rgba(0,0,0,.1)',
+				},
+				'*::-webkit-scrollbar-thumb': {
+					backgroundColor: 'rgba(0,0,0,.1)',
+					borderRadius: '10px',
+				},
 			},
 		},
+
 		// Override styles for MuiButton
 		MuiButton: {
 			styleOverrides: {
 				root: {
-					textTransform: 'none', // Disable uppercase text transformation
+					textTransform: 'none',
 				},
 			},
 		},

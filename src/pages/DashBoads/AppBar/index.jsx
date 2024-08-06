@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Profile from './Menu/Profile';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import SearchIcon from '@mui/icons-material/Search';
 const AppBar = () => {
 	return (
 		<Box
@@ -24,6 +25,9 @@ const AppBar = () => {
 				justifyContent: 'space-between',
 				overflowX: 'auto',
 				overflowY: 'hidden',
+				backgroundColor: 'secondary.main',
+				paddingX: '20px',
+				paddingY: '10px',
 			}}>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
 				<AppsIcon sx={{ fontSize: '2rem', color: 'primary.main' }} />
@@ -46,15 +50,13 @@ const AppBar = () => {
 			<Box
 				sx={{ display: 'flex', alignItems: 'center', gap: 2, height: '40px' }}>
 				<TextField
-					id='outlined-basic'
-					label='Search'
-					variant='outlined'
+					id='outlined-basic-search'
+					label={<SearchIcon sx={{ color: 'primary.main' }} />}
 					size='small'
 				/>
-
 				<ThemeMode />
 				<NotificationsNoneIcon />
-				<HelpOutlineIcon />
+				<HelpOutlineIcon sx={{ color: 'error.main' }} />
 				<Profile />
 			</Box>
 		</Box>

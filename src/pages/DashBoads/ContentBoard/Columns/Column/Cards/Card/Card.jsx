@@ -16,27 +16,24 @@ const Card = ({ card }) => {
 	return (
 		<MuiCard
 			sx={{
-				maxWidth: 345,
+				width: 340,
 				overflow: 'unset',
-				boxShadow: 'none',
+				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				borderRadius: '5px',
 				paddingBottom: '0',
 			}}>
-			{card.cover && (
-				<CardMedia
-					sx={{ height: 140 }}
-					image={card.cover}
-					title='green iguana'
-				/>
-			)}
+			{card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
 			<CardContent>
-				<Typography gutterBottom variant='h6' component='div'>
+				<Typography
+					sx={{
+						color: 'primary.main',
+						fontSize: '14px',
+						fontWeight: 'bold',
+					}}>
 					{card.title}
 				</Typography>
 				<Typography
-					variant='body2'
-					color='text.secondary'
-					sx={{ paddingBottom: '0px' }}>
+					sx={{ fontSize: '12px', color: 'primary.main', fontStyle: 'italic' }}>
 					{card.description}
 				</Typography>
 			</CardContent>

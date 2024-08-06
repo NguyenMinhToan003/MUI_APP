@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import Typography from '@mui/material/Typography';
 
 const ThemeMode = () => {
 	const { mode, setMode } = useColorScheme();
@@ -15,7 +16,7 @@ const ThemeMode = () => {
 	};
 	return (
 		<>
-			<Box sx={{ width: '180px', height: '100%' }}>
+			<Box sx={{ width: '160px', height: '100%' }}>
 				<FormControl fullWidth sx={{ height: '100%' }}>
 					<InputLabel id='mode-theme'>Mode</InputLabel>
 					<Select
@@ -29,10 +30,10 @@ const ThemeMode = () => {
 								sx={{
 									display: 'flex',
 									alignItems: 'center',
-									justifyContent: 'center',
+									justifyContent: 'start',
 									gap: 1,
 								}}>
-								<LightModeIcon /> Light
+								<LightModeIcon /> <Typography>Light</Typography>
 							</Box>
 						</MenuItem>
 						<MenuItem value='dark'>
@@ -40,7 +41,7 @@ const ThemeMode = () => {
 								sx={{
 									display: 'flex',
 									alignItems: 'center',
-									justifyContent: 'center',
+									justifyContent: 'start',
 									gap: 1,
 								}}>
 								<DarkModeIcon /> Dark
@@ -51,7 +52,7 @@ const ThemeMode = () => {
 								sx={{
 									display: 'flex',
 									alignItems: 'center',
-									justifyContent: 'center',
+									justifyContent: 'start',
 									gap: 1,
 								}}>
 								<SystemUpdateAltIcon />

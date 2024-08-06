@@ -2,21 +2,38 @@ import Box from '@mui/material/Box';
 import Cards from './Cards/Cards';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-
+import mapOrder from '../../../../../utils/Mapping';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 const Column = ({ column }) => {
+	const cardOrder = mapOrder(column.cards, column.cardOrderIds, '_id');
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+	} = useSortable({ id: column._id, data: column });
+
+	const style = {
+		transform: CSS.Translate.toString(transform),
+		transition,
+	};
 	return (
 		<Box
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
 			sx={{
 				maxHeight: '100%',
 				width: '360px',
-				borderRadius: '5px',
+				borderRadius: '8px',
 				display: 'flex',
 				gap: 1,
 				flexDirection: 'column',
 				backgroundColor: 'secondary.main',
-				padding: 1,
-				boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)',
-				cursor: 'pointer',
+				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 			}}>
 			<Header title={column.title} />
 			<Box
@@ -37,7 +54,7 @@ const Column = ({ column }) => {
 					},
 					maxHeight: (theme) => theme.trello.columnContentHeight,
 				}}>
-				<Cards cards={column.cards} />
+				<Cards cards={cardOrder} />
 			</Box>
 			<Footer />
 		</Box>

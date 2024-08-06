@@ -4,7 +4,7 @@ const Cards = ({ cards }) => {
 	return (
 		<>
 			{cards.map((card) => (
-				<Card key={card} card={card} />
+				<Card key={card._id} card={card} />
 			))}
 		</>
 	);
