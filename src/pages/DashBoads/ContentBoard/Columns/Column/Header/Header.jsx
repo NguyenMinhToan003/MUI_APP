@@ -28,13 +28,17 @@ const Header = ({ title }) => {
 					display: 'flex',
 					justifyContent: 'space-between',
 					alignItems: 'center',
-					padding: '0 5px',
+					padding: '10px',
 				}}>
-				<Typography variant='h6'>{title}</Typography>
+				<Typography
+					variant='span'
+					sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+					{title}
+				</Typography>
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-					<KeyboardArrowDownIcon sx={{ fontSize: '30px' }} />
+					<KeyboardArrowDownIcon sx={{ fontSize: '26px', cursor: 'poiter' }} />
 					<MoreVertIcon
-						sx={{ fontSize: '30px' }}
+						sx={{ fontSize: '24px' }}
 						id='basic-button-column'
 						aria-controls={open ? 'basic-menu-column' : undefined}
 						aria-haspopup='true'

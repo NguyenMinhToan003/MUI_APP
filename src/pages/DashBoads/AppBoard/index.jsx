@@ -17,7 +17,7 @@ const AppBoard = ({ board }) => {
 				justifyContent: 'space-between',
 				overflowX: 'auto',
 				overflowY: 'hidden',
-				padding: 2,
+				padding: '10px',
 			}}>
 			<Box
 				sx={{
@@ -26,7 +26,9 @@ const AppBoard = ({ board }) => {
 					alignItems: 'center',
 					gap: 2,
 				}}>
-				<Typography variant='h6' sx={{ color: 'white', marginLeft: 2 }}>
+				<Typography
+					variant='h6'
+					sx={{ color: 'white', marginLeft: 2, whiteSpace: 'nowrap' }}>
 					{board.title}
 				</Typography>
 			</Box>
