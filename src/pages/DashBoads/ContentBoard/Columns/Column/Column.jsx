@@ -13,11 +13,14 @@ const Column = ({ column }) => {
 		setNodeRef,
 		transform,
 		transition,
+		isDragging,
 	} = useSortable({ id: column._id, data: column });
 
 	const style = {
+		touchAction: 'none',
 		transform: CSS.Translate.toString(transform),
 		transition,
+		opacity: isDragging ? 0.5 : undefined,
 	};
 	return (
 		<Box
