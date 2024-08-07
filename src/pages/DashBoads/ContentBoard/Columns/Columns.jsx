@@ -7,7 +7,7 @@ import {
 import { Button } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 const Columns = ({ columns }) => {
-	//! item is the column id ex:[ 'column-1', 'column-2', 'column-3'] not the column object
+	//*item is the column id ex:[ 'column-1', 'column-2', 'column-3'] not the column object
 	return (
 		<>
 			<SortableContext
@@ -22,6 +22,7 @@ const Columns = ({ columns }) => {
 						overflowX: 'auto',
 						overflowY: 'hidden',
 						paddingBottom: 2,
+						paddingLeft: '5px',
 					}}>
 					{columns.map((column) => (
 						<Column key={column._id} column={column} />
@@ -39,6 +40,9 @@ const Columns = ({ columns }) => {
 									color: 'secondary.main',
 								},
 								whiteSpace: 'nowrap',
+							}}
+							onClick={() => {
+								console.log('Add Columns');
 							}}>
 							Add Columns
 						</Button>

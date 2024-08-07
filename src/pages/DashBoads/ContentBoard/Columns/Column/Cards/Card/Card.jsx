@@ -7,14 +7,34 @@ import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import MessageIcon from '@mui/icons-material/Message';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 const Card = ({ card }) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({ id: card._id, data: card });
+	const style = {
+		touchAction: 'none',
+		transform: CSS.Translate.toString(transform),
+		transition,
+		opacity: isDragging ? 0.5 : undefined,
+	};
 	const shouldShowActions =
 		card?.memberIds?.length ||
 		card?.comments?.length ||
 		card?.attachments?.length;
-
 	return (
 		<MuiCard
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
 			sx={{
 				width: 340,
 				overflow: 'unset',
