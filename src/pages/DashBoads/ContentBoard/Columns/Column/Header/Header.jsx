@@ -38,7 +38,11 @@ const Header = ({ title }) => {
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 					<KeyboardArrowDownIcon sx={{ fontSize: '26px', cursor: 'poiter' }} />
 					<MoreVertIcon
-						sx={{ fontSize: '24px' }}
+						sx={{
+							fontSize: '24px',
+							width: '24px',
+							height: '24px',
+						}}
 						id='basic-button-column'
 						aria-controls={open ? 'basic-menu-column' : undefined}
 						aria-haspopup='true'

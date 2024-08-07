@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Columns from './Columns/Columns';
 import mapOrder from '../../../utils/Mapping';
+import { cloneDeep } from 'lodash';
 import {
 	DndContext,
 	DragOverlay,
@@ -9,6 +10,7 @@ import {
 	MouseSensor,
 	useSensor,
 	useSensors,
+	closestCorners,
 	defaultDropAnimationSideEffects,
 } from '@dnd-kit/core';
 import { useEffect, useState } from 'react';
@@ -26,6 +28,11 @@ const ContentBoard = ({ board }) => {
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
 	const [draggingId, setDraggingId] = useState(null);
+	const findColumnByCardID = (cardId) => {
+		return columnsOrder.find((column) =>
+			column.cards.find((card) => card._id === cardId)
+		);
+	};
 	const pointerSensor = useSensor(PointerSensor, {
 		activationConstraint: { distance: 15 },
 	});
@@ -49,6 +56,53 @@ const ContentBoard = ({ board }) => {
 		);
 		setDraggingData(event.active.data.current);
 	};
+	const handlerDragOver = (event) => {
+		const { active, over } = event;
+		if (draggingType === DRAGG_TYPE.COLUMN) return;
+		if (!active || !over) return;
+
+		const activeColumn = findColumnByCardID(active.id);
+		const overColumn = findColumnByCardID(over.id);
+		if (!activeColumn || !overColumn) return;
+		if (activeColumn._id === overColumn._id) return;
+		const activeCardIndex = activeColumn.cards.findIndex(
+			(i) => i._id === active.id
+		);
+		const overCardIndex = overColumn.cards.findIndex((i) => i._id === over.id);
+		setColumnsOrder((prevColumns) => {
+			// kiem tra xem co dang keo qua card khac khong
+			const isBelowOverItem =
+				active.rect.current.translated &&
+				active.rect.current.translated.top > over.rect.top + over.rect.height;
+			const modifier = isBelowOverItem ? 1 : 0;
+			let newIndex =
+				overCardIndex >= 0 ? overCardIndex + modifier : overItems.length + 1;
+			const nextColumns = cloneDeep(prevColumns);
+			const nextActiveColumn = nextColumns.find(
+				(i) => i._id === activeColumn._id
+			);
+			const nextOverColumn = nextColumns.find((i) => i._id === overColumn._id);
+			// hanh khi keo qua card khac
+			if (nextActiveColumn) {
+				nextActiveColumn.cards = nextActiveColumn.cards.filter(
+					(i) => i._id !== active.id
+				);
+				nextActiveColumn.columnOrderIds = nextActiveColumn.cards.map(
+					(i) => i._id
+				);
+			}
+			// hanh khi tha qua card khac
+			if (nextOverColumn) {
+				nextOverColumn.cards = nextOverColumn.cards.filter(
+					(i) => i._id !== active.id
+				);
+				nextOverColumn.cards.splice(newIndex, 0, active.data.current);
+				nextOverColumn.columnOrderIds = nextOverColumn.cards.map((i) => i._id);
+			}
+			return nextColumns;
+		});
+	};
+
 	const handlerDragEnd = (event) => {
 		const { active, over } = event;
 
@@ -60,29 +114,6 @@ const ContentBoard = ({ board }) => {
 				const newColumnOrder = arrayMove(columnsOrder, overIndex, activeIndex);
 				setColumnsOrder(newColumnOrder);
 			} else if (draggingType === DRAGG_TYPE.CARD) {
-				// const activeColumn = columnsOrder.findIndex(
-				// 	(i) => i._id === active.data.current.columnId
-				// );
-				// const overColumn = columnsOrder.findIndex(
-				// 	(i) => i._id === over.data.current.columnId
-				// );
-				// const activeIndex = columnsOrder[activeColumn].cards.findIndex(
-				// 	(i) => i._id === active.id
-				// );
-				// const overIndex = columnsOrder[overColumn].cards.findIndex(
-				// 	(i) => i._id === over.id
-				// );
-				// let newColumn = columnsOrder[overColumn];
-				// // console.log(newColumn, activeIndex, overIndex);
-				// const newCards = arrayMove(newColumn.cards, overIndex, activeIndex);
-				// newColumn = {
-				// 	...newColumn,
-				// 	cards: newCards,
-				// };
-				// const newColumnsOrder = [...columnsOrder];
-				// newColumnsOrder[overColumn] = newColumn;
-				// console.log(newColumnsOrder);
-				// setColumnsOrder(newColumnsOrder);
 			}
 		}
 		setDraggingId(null);
@@ -98,8 +129,10 @@ const ContentBoard = ({ board }) => {
 	return (
 		<DndContext
 			onDragStart={handlerDragStart}
+			onDragOver={handlerDragOver}
 			onDragEnd={handlerDragEnd}
-			sensors={sensors}>
+			sensors={sensors}
+			collisionDetection={closestCorners}>
 			<Box
 				sx={{
 					height: (theme) => theme.trello.boardContentHeight,

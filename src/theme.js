@@ -5,11 +5,11 @@ const theme = extendTheme({
 	// Custom properties for layout
 	trello: {
 		appbarHeight: '60px',
-		boardbarHeight: '54px',
-		boardContentHeight: 'calc( 100vh - 60px - 54px )',
+		boardbarHeight: '60px',
+		boardContentHeight: 'calc( 100vh - 60px - 60px )',
 		columnHeaderHeight: '60px',
 		columnFooterHeight: '60px',
-		columnContentHeight: 'calc(100vh - 60px - 54px  - 60px - 60px )',
+		columnContentHeight: 'calc(100vh - 60px - 60px  - 60px - 60px )',
 	},
 
 	colorSchemes: {
