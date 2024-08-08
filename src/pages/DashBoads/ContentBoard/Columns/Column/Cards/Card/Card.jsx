@@ -42,6 +42,7 @@ const Card = ({ card }) => {
 				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				borderRadius: '5px',
 				paddingBottom: '0',
+				cursor: 'pointer',
 			}}>
 			{card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
 			<CardContent>

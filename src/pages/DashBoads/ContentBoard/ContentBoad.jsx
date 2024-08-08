@@ -28,6 +28,7 @@ const ContentBoard = ({ board }) => {
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
 	const [draggingId, setDraggingId] = useState(null);
+	const [oldColumnWhenDragging, setOldColumnWhenDragging] = useState(null);
 	const findColumnByCardID = (cardId) => {
 		return columnsOrder.find((column) =>
 			column.cards.find((card) => card._id === cardId)
@@ -48,42 +49,49 @@ const ContentBoard = ({ board }) => {
 	useEffect(() => {
 		setColumnsOrder(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
 	}, [board]);
-
+	useEffect(() => {
+		console.log('dashboard', columnsOrder);
+	}, [columnsOrder]);
 	const handlerDragStart = (event) => {
 		setDraggingId(event.active.id);
 		setDraggingType(
 			event.active.data.current.columnId ? DRAGG_TYPE.CARD : DRAGG_TYPE.COLUMN
 		);
 		setDraggingData(event.active.data.current);
+		if (event.active.data.current.columnId) {
+			setOldColumnWhenDragging(findColumnByCardID(event.active.id));
+		}
 	};
 	const handlerDragOver = (event) => {
 		const { active, over } = event;
 		if (draggingType === DRAGG_TYPE.COLUMN) return;
 		if (!active || !over) return;
-
+		// tim column
 		const activeColumn = findColumnByCardID(active.id);
 		const overColumn = findColumnByCardID(over.id);
 		if (!activeColumn || !overColumn) return;
 		if (activeColumn._id === overColumn._id) return;
-		const activeCardIndex = activeColumn.cards.findIndex(
-			(i) => i._id === active.id
-		);
+		// tim index cua card trong column
 		const overCardIndex = overColumn.cards.findIndex((i) => i._id === over.id);
 		setColumnsOrder((prevColumns) => {
-			// kiem tra xem co dang keo qua card khac khong
 			const isBelowOverItem =
 				active.rect.current.translated &&
 				active.rect.current.translated.top > over.rect.top + over.rect.height;
+			// kiem tra xem co dang keo qua card khac khong
 			const modifier = isBelowOverItem ? 1 : 0;
+			// tim vi tri cua card tha vao trong column
 			let newIndex =
 				overCardIndex >= 0 ? overCardIndex + modifier : overItems.length + 1;
 			const nextColumns = cloneDeep(prevColumns);
+			// column hien tai
 			const nextActiveColumn = nextColumns.find(
 				(i) => i._id === activeColumn._id
 			);
+			// column keo qua
 			const nextOverColumn = nextColumns.find((i) => i._id === overColumn._id);
-			// hanh khi keo qua card khac
+			// hanh dong khi card keo qua column khac
 			if (nextActiveColumn) {
+				// xoa card hien tai
 				nextActiveColumn.cards = nextActiveColumn.cards.filter(
 					(i) => i._id !== active.id
 				);
@@ -91,34 +99,70 @@ const ContentBoard = ({ board }) => {
 					(i) => i._id
 				);
 			}
-			// hanh khi tha qua card khac
+			// hanh dong khi card tha vao column khac
 			if (nextOverColumn) {
+				// neu ton tai card thi xoa card do
 				nextOverColumn.cards = nextOverColumn.cards.filter(
 					(i) => i._id !== active.id
 				);
-				nextOverColumn.cards.splice(newIndex, 0, active.data.current);
+				// them card vao vi tri moi
+				nextOverColumn.cards = nextOverColumn.cards.toSpliced(
+					newIndex,
+					0,
+					active.data.current
+				);
 				nextOverColumn.columnOrderIds = nextOverColumn.cards.map((i) => i._id);
 			}
 			return nextColumns;
 		});
 	};
-
 	const handlerDragEnd = (event) => {
 		const { active, over } = event;
-
 		if (!over) return;
-		else if (active.id !== over.id) {
-			if (draggingType === DRAGG_TYPE.COLUMN) {
-				const activeIndex = columnsOrder.findIndex((i) => i._id === active.id);
-				const overIndex = columnsOrder.findIndex((i) => i._id === over.id);
-				const newColumnOrder = arrayMove(columnsOrder, overIndex, activeIndex);
-				setColumnsOrder(newColumnOrder);
-			} else if (draggingType === DRAGG_TYPE.CARD) {
+		if (active.id === over.id) return;
+		if (draggingType === DRAGG_TYPE.COLUMN) {
+			const activeIndex = columnsOrder.findIndex((i) => i._id === active.id);
+			const overIndex = columnsOrder.findIndex((i) => i._id === over.id);
+			const newColumnOrder = arrayMove(columnsOrder, activeIndex, overIndex);
+			// const newColumnOrderIds = newColumnOrder.map((i) => i._id);
+			setColumnsOrder(newColumnOrder);
+		} else if (draggingType === DRAGG_TYPE.CARD) {
+			// phai su dung oldColumnWhenDragging ( khoong dung active.columnId vi no da thay doi khi keo qua column khac <ham handlerDragOver>)
+			if (oldColumnWhenDragging?._id === over.id) return;
+			// tim column Keo qua
+			const activeColumn = oldColumnWhenDragging;
+			// tim column tha vao
+			const overColumn = findColumnByCardID(over.id);
+			if (activeColumn._id === overColumn._id) {
+				const activeCardIndex = oldColumnWhenDragging.cards.findIndex(
+					(i) => i._id === draggingId
+				);
+				const overCardIndex = overColumn.cards.findIndex(
+					(i) => i._id === over.id
+				);
+				// thay doi vi tri card trong column (Bien luu array card da thay doi khi keo tha )
+				const newCardOrder = arrayMove(
+					overColumn.cards,
+					activeCardIndex,
+					overCardIndex
+				);
+				// cap nhat stateColumnOrder
+				setColumnsOrder((prevColumns) => {
+					const nextColumns = cloneDeep(prevColumns);
+					const nextOverColumn = nextColumns.find(
+						(i) => i._id === overColumn._id
+					);
+					nextOverColumn.cards = newCardOrder;
+					nextOverColumn.columnOrderIds = newCardOrder.map((i) => i._id);
+					return nextColumns;
+				});
 			}
 		}
+
 		setDraggingId(null);
 		setDraggingType(null);
 		setDraggingData(null);
+		setOldColumnWhenDragging(null);
 	};
 	const handlerAnimation = {
 		sideEffect: defaultDropAnimationSideEffects({

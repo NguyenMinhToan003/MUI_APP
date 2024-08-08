@@ -5,8 +5,9 @@ import Footer from './Footer/Footer';
 import mapOrder from '../../../../../utils/Mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
 const Column = ({ column }) => {
-	const cardOrder = mapOrder(column.cards, column.cardOrderIds, '_id');
+	let cardOrder = mapOrder(column?.cards, column?.cardOrderIds, 'id');
 	const {
 		attributes,
 		listeners,
