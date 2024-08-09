@@ -43,6 +43,8 @@ const Card = ({ card }) => {
 				borderRadius: '5px',
 				paddingBottom: '0',
 				cursor: 'pointer',
+				opacity: card?.FE_PLACEHOLDER_CARD ? '0' : '1',
+				visibility: card?.FE_PLACEHOLDER_CARD ? 'hidden' : 'visible',
 			}}>
 			{card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
 			<CardContent>

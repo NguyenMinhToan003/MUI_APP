@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Columns from './Columns/Columns';
 import mapOrder from '../../../utils/Mapping';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import {
 	DndContext,
 	DragOverlay,
@@ -12,12 +12,15 @@ import {
 	useSensors,
 	closestCorners,
 	defaultDropAnimationSideEffects,
+	pointerWithin,
+	rectIntersection,
+	getFirstCollision,
 } from '@dnd-kit/core';
-import { useEffect, useState } from 'react';
+import { createPlaceholderCard } from '../../../utils/Function';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import Column from './Columns/Column/Column';
 import Card from './Columns/Column/Cards/Card/Card';
-import { FormatOverlineOutlined } from '@mui/icons-material';
 
 const DRAGG_TYPE = {
 	COLUMN: 'DRAGG_TYPE_COLUMN',
@@ -29,6 +32,7 @@ const ContentBoard = ({ board }) => {
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
 	const [draggingId, setDraggingId] = useState(null);
+	const lastOverId = useRef(null);
 	const [oldColumnWhenDragging, setOldColumnWhenDragging] = useState(null);
 	const findColumnByCardID = (cardId) => {
 		return columnsOrder.find((column) =>
@@ -56,7 +60,8 @@ const ContentBoard = ({ board }) => {
 		over,
 		activeColumn,
 		overColumn,
-		overCardIndex
+		overCardIndex,
+		overItems
 	) => {
 		setColumnsOrder((prevColumns) => {
 			const isBelowOverItem =
@@ -65,21 +70,24 @@ const ContentBoard = ({ board }) => {
 			// kiem tra xem co dang keo qua card khac khong
 			const modifier = isBelowOverItem ? 1 : 0;
 			// tim vi tri cua card tha vao trong column
+			console.log('overItems', overItems);
 			let newIndex =
-				overCardIndex >= 0 ? overCardIndex + modifier : overItems.length + 1;
+				overCardIndex >= 0 ? overCardIndex + modifier : overItems?.length + 1;
 			const nextColumns = cloneDeep(prevColumns);
 			// column keo qua
 			const nextActiveColumn = nextColumns.find(
 				(i) => i._id === activeColumn._id
 			);
 			// column tha vao
-			const nextOverColumn = nextColumns.find((i) => i._id === overColumn._id);
+			const nextOverColumn = nextColumns.find((i) => i._id === overColumn?._id);
 			// hanh dong khi card keo qua column khac
 			if (nextActiveColumn) {
 				// xoa card hien tai
 				nextActiveColumn.cards = nextActiveColumn.cards.filter(
 					(i) => i._id !== active.id
 				);
+				if (isEmpty(nextActiveColumn.cards))
+					nextActiveColumn.cards = [createPlaceholderCard(nextActiveColumn)];
 				nextActiveColumn.columnOrderIds = nextActiveColumn.cards.map(
 					(i) => i._id
 				);
@@ -95,9 +103,13 @@ const ContentBoard = ({ board }) => {
 					...active.data.current,
 					columnId: nextOverColumn._id,
 				});
+				// xoa placeholder card neu co
+				nextOverColumn.cards = nextOverColumn.cards.filter(
+					(i) => !i.FE_PLACEHOLDER_CARD
+				);
 				nextOverColumn.columnOrderIds = nextOverColumn.cards.map((i) => i._id);
-				console.log(nextOverColumn);
 			}
+			console.log(nextColumns);
 			return nextColumns;
 		});
 	};
@@ -125,12 +137,14 @@ const ContentBoard = ({ board }) => {
 		if (activeColumn?._id === overColumn?._id) return;
 		// tim vi tri cua card duoc tha trong column
 		const overCardIndex = overColumn.cards.findIndex((i) => i._id === over.id);
+		const overItems = overColumn?.cards;
 		setColumnsOrderWhhenDraggingBewteenColumn(
 			active,
 			over,
 			activeColumn,
 			overColumn,
-			overCardIndex
+			overCardIndex,
+			overItems
 		);
 	};
 	const handlerDragEnd = (event) => {
@@ -153,11 +167,11 @@ const ContentBoard = ({ board }) => {
 			const activeCardIndex = oldColumnWhenDragging.cards.findIndex(
 				(i) => i._id === draggingId
 			);
-			const overCardIndex = overColumn.cards.findIndex(
+			const overCardIndex = overColumn?.cards.findIndex(
 				(i) => i._id === over.id
 			);
 			// neu keo qua va tha vao cung 1 column
-			if (activeColumn._id === overColumn._id) {
+			if (activeColumn?._id === overColumn?._id) {
 				// thay doi vi tri card trong column (Bien luu array card da thay doi khi keo tha )
 				const newCardOrder = arrayMove(
 					overColumn.cards,
@@ -176,13 +190,15 @@ const ContentBoard = ({ board }) => {
 				});
 			}
 			// neu keo qua va tha vao khac column
-			if (activeColumn._id !== overColumn._id) {
+			if (activeColumn?._id !== overColumn?._id) {
+				const overItems = overColumn?.cards;
 				setColumnsOrderWhhenDraggingBewteenColumn(
 					active,
 					over,
 					activeColumn,
 					overColumn,
-					overCardIndex
+					overCardIndex,
+					overItems
 				);
 			}
 		}
@@ -198,13 +214,54 @@ const ContentBoard = ({ board }) => {
 		}),
 	};
 
+	const collisionDetectionStrate = useCallback(
+		(args) => {
+			if (draggingType === DRAGG_TYPE.COLUMN || !draggingType)
+				return closestCorners({ ...args });
+			// tim diem va cham con tro chuot voi cac element
+			const pointerIntersections = pointerWithin(args);
+			if (!pointerIntersections?.length > 0) return;
+			// const intersections =
+			pointerIntersections.length > 0
+				? // neu co diem va cham thi dung
+				  pointerIntersections
+				: rectIntersection(args);
+			// tim overId dau tien keo vao
+			let overId = getFirstCollision(pointerIntersections, 'id');
+			if (overId) {
+				const overColumn = columnsOrder.find((i) => i._id === overId);
+
+				if (overColumn) {
+					overId = closestCorners({
+						...args,
+						droppableContainers: args.droppableContainers.filter((element) => {
+							return (
+								element.id !== overId &&
+								overColumn?.columnOrderIds?.includes(element.id)
+							);
+						}),
+					});
+					overId = overId[0]?.id;
+				}
+
+				// neu co overId thi cap nhat lai lastOverId
+				lastOverId.current = overId;
+				return [{ id: overId }];
+			}
+			// neu khong co overId thi tra ve lastOverId
+			// muc dic cua lastOverId la khi overId = null thi lastOverId se la gia tri cuoi cung cua overId
+			return lastOverId.current ? [{ id: lastOverId.current }] : [];
+		},
+		[columnsOrder]
+	);
 	return (
 		<DndContext
 			onDragStart={handlerDragStart}
 			onDragOver={handlerDragOver}
 			onDragEnd={handlerDragEnd}
 			sensors={sensors}
-			collisionDetection={closestCorners}>
+			// collisionDetection={closestCorners}
+			collisionDetection={collisionDetectionStrate}>
 			<Box
 				sx={{
 					height: (theme) => theme.trello.boardContentHeight,
