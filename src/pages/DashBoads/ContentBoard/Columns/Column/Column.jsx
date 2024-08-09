@@ -24,43 +24,42 @@ const Column = ({ column }) => {
 		opacity: isDragging ? 0.5 : undefined,
 	};
 	return (
-		<Box
-			ref={setNodeRef}
-			style={style}
-			{...attributes}
-			{...listeners}
-			sx={{
-				maxHeight: '100%',
-				width: '360px',
-				borderRadius: '8px',
-				display: 'flex',
-				gap: 1,
-				flexDirection: 'column',
-				backgroundColor: 'secondary.main',
-				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
-			}}>
-			<Header title={column.title} />
+		<Box ref={setNodeRef} style={style} {...attributes} sx={{ height: '100%' }}>
 			<Box
+				{...listeners}
 				sx={{
+					maxHeight: '100%',
+					width: '360px',
+					borderRadius: '8px',
 					display: 'flex',
-					gap: 2,
+					gap: 1,
 					flexDirection: 'column',
-					overflowY: 'auto',
-					overflowX: 'hidden',
-					margin: '0 5px',
-					padding: '0 5px',
-					'&::-webkit-scrollbar': {
-						width: '0.4em',
-					},
-					'&::-webkit-scrollbar-thumb': {
-						backgroundColor: 'primary.main',
-						borderRadius: '5px',
-					},
-					maxHeight: (theme) => theme.trello.columnContentHeight,
+					backgroundColor: 'secondary.main',
+					boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				}}>
-				<Cards cards={cardOrder} />
+				<Header title={column.title} />
+				<Box
+					sx={{
+						display: 'flex',
+						gap: 2,
+						flexDirection: 'column',
+						overflowY: 'auto',
+						overflowX: 'hidden',
+						margin: '0 5px',
+						padding: '0 5px',
+						'&::-webkit-scrollbar': {
+							width: '0.4em',
+						},
+						'&::-webkit-scrollbar-thumb': {
+							backgroundColor: 'primary.main',
+							borderRadius: '5px',
+						},
+						maxHeight: (theme) => theme.trello.columnContentHeight,
+					}}>
+					<Cards cards={cardOrder} />
+				</Box>
+				<Footer />
 			</Box>
-			<Footer />
 		</Box>
 	);
 };
