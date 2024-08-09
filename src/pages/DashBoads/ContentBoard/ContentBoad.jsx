@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Columns from './Columns/Columns';
 import mapOrder from '../../../utils/Mapping';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import {
 	DndContext,
 	DragOverlay,
@@ -12,8 +12,11 @@ import {
 	useSensors,
 	closestCorners,
 	defaultDropAnimationSideEffects,
+	rectIntersection,
+	pointerWithin,
+	getFirstCollision,
 } from '@dnd-kit/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import Column from './Columns/Column/Column';
 import Card from './Columns/Column/Cards/Card/Card';
@@ -29,6 +32,7 @@ const ContentBoard = ({ board }) => {
 	const [draggingType, setDraggingType] = useState(null);
 	const [draggingId, setDraggingId] = useState(null);
 	const [oldColumnWhenDragging, setOldColumnWhenDragging] = useState(null);
+	const lastOverId = useRef(null);
 	const findColumnByCardID = (cardId) => {
 		return columnsOrder.find((column) =>
 			column.cards.find((card) => card._id === cardId)
@@ -49,9 +53,7 @@ const ContentBoard = ({ board }) => {
 	useEffect(() => {
 		setColumnsOrder(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
 	}, [board]);
-	useEffect(() => {
-		console.log('dashboard', columnsOrder);
-	}, [columnsOrder]);
+
 	const handlerDragStart = (event) => {
 		setDraggingId(event.active.id);
 		setDraggingType(
@@ -95,6 +97,9 @@ const ContentBoard = ({ board }) => {
 				nextActiveColumn.cards = nextActiveColumn.cards.filter(
 					(i) => i._id !== active.id
 				);
+				if (isEmpty(nextActiveColumn.cards)) {
+					console.log('nextActiveColumn.cards EMPTY');
+				}
 				nextActiveColumn.columnOrderIds = nextActiveColumn.cards.map(
 					(i) => i._id
 				);
@@ -133,7 +138,7 @@ const ContentBoard = ({ board }) => {
 			const activeColumn = oldColumnWhenDragging;
 			// tim column tha vao
 			const overColumn = findColumnByCardID(over.id);
-			if (activeColumn._id === overColumn._id) {
+			if (activeColumn?._id === overColumn?._id) {
 				const activeCardIndex = oldColumnWhenDragging.cards.findIndex(
 					(i) => i._id === draggingId
 				);
@@ -169,14 +174,54 @@ const ContentBoard = ({ board }) => {
 			styles: { active: { backgroundColor: 'red' } },
 		}),
 	};
+	const collisionDetectionStrate = useCallback(
+		(args) => {
+			if (draggingType === DRAGG_TYPE.COLUMN)
+				return closestCorners({ ...args });
+			// tim diem va cham con tro chuot voi cac element
+			const pointerIntersections = pointerWithin(args);
+			if (!pointerIntersections?.length > 0) return;
+			// const intersections =
+			pointerIntersections.length > 0
+				? // neu co diem va cham thi dung
+				  pointerIntersections
+				: rectIntersection(args);
+			// tim overId dau tien keo vao
+			let overId = getFirstCollision(pointerIntersections, 'id');
+			if (overId) {
+				const overColumn = columnsOrder.find((i) => i._id === overId);
 
+				if (overColumn) {
+					overId = closestCorners({
+						...args,
+						droppableContainers: args.droppableContainers.filter((element) => {
+							return (
+								element.id !== overId &&
+								overColumn?.columnOrderIds?.includes(element.id)
+							);
+						}),
+					});
+					overId = overId[0]?.id;
+				}
+
+				// neu co overId thi cap nhat lai lastOverId
+				lastOverId.current = overId;
+				return [{ id: overId }];
+			}
+			// neu khong co overId thi tra ve lastOverId
+			// muc dic cua lastOverId la khi overId = null thi lastOverId se la gia tri cuoi cung cua overId
+			return lastOverId.current ? [{ id: lastOverId.current }] : [];
+		},
+		[columnsOrder]
+	);
 	return (
 		<DndContext
 			onDragStart={handlerDragStart}
 			onDragOver={handlerDragOver}
 			onDragEnd={handlerDragEnd}
 			sensors={sensors}
-			collisionDetection={closestCorners}>
+			// collisionDetection={closestCorners}
+			collisionDetection={collisionDetectionStrate}>
 			<Box
 				sx={{
 					height: (theme) => theme.trello.boardContentHeight,

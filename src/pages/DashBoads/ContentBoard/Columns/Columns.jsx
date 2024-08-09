@@ -18,6 +18,7 @@ const Columns = ({ columns }) => {
 						display: 'flex',
 						alignItems: 'start',
 						gap: 3,
+						height: '100%',
 						width: '100%',
 						overflowX: 'auto',
 						overflowY: 'hidden',
