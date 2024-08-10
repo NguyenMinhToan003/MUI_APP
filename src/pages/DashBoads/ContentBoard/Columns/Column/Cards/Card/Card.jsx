@@ -37,7 +37,7 @@ const Card = ({ card }) => {
 			{...attributes}
 			{...listeners}
 			sx={{
-				width: 340,
+				width: 335,
 				overflow: 'unset',
 				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				borderRadius: '5px',
