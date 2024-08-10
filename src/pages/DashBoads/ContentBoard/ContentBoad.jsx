@@ -70,7 +70,7 @@ const ContentBoard = ({ board }) => {
 			// kiem tra xem co dang keo qua card khac khong
 			const modifier = isBelowOverItem ? 1 : 0;
 			// tim vi tri cua card tha vao trong column
-			console.log('overItems', overItems);
+
 			let newIndex =
 				overCardIndex >= 0 ? overCardIndex + modifier : overItems?.length + 1;
 			const nextColumns = cloneDeep(prevColumns);
@@ -202,8 +202,7 @@ const ContentBoard = ({ board }) => {
 				);
 			}
 		}
-
-		setDraggingId(null);
+    setDraggingId(null);
 		setDraggingType(null);
 		setDraggingData(null);
 		setOldColumnWhenDragging(null);
@@ -230,8 +229,7 @@ const ContentBoard = ({ board }) => {
 			let overId = getFirstCollision(pointerIntersections, 'id');
 			if (overId) {
 				const overColumn = columnsOrder.find((i) => i._id === overId);
-
-				if (overColumn) {
+			if (overColumn) {
 					overId = closestCorners({
 						...args,
 						droppableContainers: args.droppableContainers.filter((element) => {
