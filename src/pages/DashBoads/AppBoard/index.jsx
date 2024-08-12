@@ -29,7 +29,7 @@ const AppBoard = ({ board }) => {
 				<Typography
 					variant='h6'
 					sx={{ color: 'white', marginLeft: 2, whiteSpace: 'nowrap' }}>
-					{board.title}
+					{board?.title}
 				</Typography>
 			</Box>
 			<Box
