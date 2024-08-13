@@ -3,6 +3,10 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import Check from '@mui/icons-material/Check';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const Workspace = () => {
@@ -34,9 +38,32 @@ const Workspace = () => {
 				MenuListProps={{
 					'aria-labelledby': 'basic-button-workspace',
 				}}>
-				<MenuItem onClick={handleClose}>Profile</MenuItem>
-				<MenuItem onClick={handleClose}>My account</MenuItem>
-				<MenuItem onClick={handleClose}>Logout</MenuItem>
+				<MenuItem>
+          <ListItemText inset>Single</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemText inset>1.15</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemText inset>Double</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <Check />
+          </ListItemIcon>
+          Custom: 1.2
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          <ListItemText>Add space before paragraph</ListItemText>
+        </MenuItem>
+        <MenuItem>
+          <ListItemText>Add space after paragraph</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          <ListItemText>Custom spacing...</ListItemText>
+        </MenuItem>
 			</Menu>
 		</Box>
 	);

@@ -29,7 +29,8 @@ const Column = ({ column }) => {
 				{...listeners}
 				sx={{
 					maxHeight: '100%',
-					width: '360px',
+					minWidth: '360px',
+					maxWidth: '360px',
 					borderRadius: '8px',
 					display: 'flex',
 					gap: 1,

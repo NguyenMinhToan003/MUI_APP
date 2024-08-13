@@ -16,7 +16,7 @@ const ThemeMode = () => {
 	};
 	return (
 		<>
-			<Box sx={{ width: '160px', height: '100%' }}>
+			<Box sx={{ width: '160px',height:'100%' }}>
 				<FormControl fullWidth sx={{ height: '100%' }}>
 					<InputLabel id='mode-theme'>Mode</InputLabel>
 					<Select
