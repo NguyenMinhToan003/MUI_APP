@@ -1,5 +1,5 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import { orange, red } from '@mui/material/colors';
 
 const theme = extendTheme({
 	// Custom properties for layout
@@ -33,11 +33,11 @@ const theme = extendTheme({
 					main: '#a9a0a9',
 				},
 				secondary: {
-					main: '#2a2a2a',
-					more: '#4b4b4b',
+					main: '#223450',
+					more: '#',
 				},
 				error: {
-					main: red[500],
+					main: orange[500],
 				},
 			},
 		},
@@ -62,6 +62,10 @@ const theme = extendTheme({
 			styleOverrides: {
 				root: {
 					textTransform: 'none',
+					fontWeight: 'bold',
+					padding: '10px 15px',	
+					width:'fit-content',
+					whiteSpace: 'nowrap',
 				},
 			},
 		},

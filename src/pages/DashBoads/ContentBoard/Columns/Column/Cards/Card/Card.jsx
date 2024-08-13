@@ -37,7 +37,7 @@ const Card = ({ card }) => {
 			{...attributes}
 			{...listeners}
 			sx={{
-				width: 335,
+				width: '100%',
 				overflow: 'unset',
 				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				borderRadius: '5px',
@@ -45,19 +45,18 @@ const Card = ({ card }) => {
 				cursor: 'pointer',
 				opacity: card?.FE_PLACEHOLDER_CARD ? '0' : '1',
 				visibility: card?.FE_PLACEHOLDER_CARD ? 'hidden' : 'visible',
+				boxShadow: card?.FE_PLACEHOLDER_CARD ? 'none' : 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 			}}>
 			{card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
-			<CardContent>
+			<CardContent >
 				<Typography
 					sx={{
-						color: 'primary.main',
-						fontSize: '14px',
-						fontWeight: 'bold',
+						color: 'primary.main', fontSize: '14px', fontWeight: 'bold',
 					}}>
 					{card.title}
 				</Typography>
 				<Typography
-					sx={{ fontSize: '12px', color: 'primary.main', fontStyle: 'italic' }}>
+					sx={{ fontSize: '10px', paddingLeft:1, paddingTop:1}}>
 					{card.description}
 				</Typography>
 			</CardContent>

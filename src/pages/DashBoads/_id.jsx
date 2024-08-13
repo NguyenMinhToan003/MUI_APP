@@ -4,6 +4,7 @@ import AppBoard from './AppBoard';
 import ContentBoard from './ContentBoard/ContentBoad'; // Corrected import
 import { fetchDataBoard } from "../../apis";
 import { useEffect, useState } from 'react';
+import data from "../../apis/mock-data"
 
 const Dashboard = () => { 
 	const [board, setBoard] = useState(null);

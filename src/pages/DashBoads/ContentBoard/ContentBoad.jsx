@@ -266,7 +266,7 @@ const ContentBoard = ({ board }) => {
 					backgroundColor: 'primary.main',
 					display: 'flex',
 					gap: 3,
-					paddingBottom: 1,
+					paddingY: 1,
 					width: '100%',
 				}}>
 				<Columns columns={columnsOrder} />
