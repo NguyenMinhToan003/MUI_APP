@@ -5,9 +5,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import {
 	DndContext,
 	DragOverlay,
-	PointerSensor,
-	TouchSensor,
-	MouseSensor,
+	// PointerSensor,
 	useSensor,
 	useSensors,
 	closestCorners,
@@ -16,6 +14,7 @@ import {
 	rectIntersection,
 	getFirstCollision,
 } from '@dnd-kit/core';
+import {TouchSensor, MouseSensor} from "../../../custom/Dndkit"
 import { createPlaceholderCard } from '../../../utils/Function';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -39,18 +38,17 @@ const ContentBoard = ({ board }) => {
 			column.cards.find((card) => card._id === cardId)
 		);
 	};
-	const pointerSensor = useSensor(PointerSensor, {
-		activationConstraint: { distance: 15 },
-	});
+	// const pointerSensor = useSensor(PointerSensor, {
+	// 	activationConstraint: { distance: 15 },
+	// });
 	// chuot di chuyen 15px moi bat dau keo ,
 	//* phai dung CSS touchAction: 'none' de khong bi cuon trang khi keo
 	const touchSensor = useSensor(TouchSensor, {
 		activationConstraint: { distance: 15 },
 	});
 	// nhan du 200ms moi bat dau keo
-	const mouseSensor = useSensor(MouseSensor, { delay: 200, tolerance: 5 });
-	const sensors = useSensors(pointerSensor, mouseSensor, touchSensor);
-
+	const mouseSensor = useSensor(MouseSensor,{activationConstraint: {delay:250,tolerance:500 }},);
+	const sensors = useSensors( mouseSensor, touchSensor);
 	useEffect(() => {
 		setColumnsOrder(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
 	}, [board]);

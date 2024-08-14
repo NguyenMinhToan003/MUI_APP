@@ -6,8 +6,11 @@ import mapOrder from '../../../../../utils/Mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+
 const Column = ({ column }) => {
+
 	let cardOrder = mapOrder(column?.cards, column?.cardOrderIds, 'id');
+
 	const {
 		attributes,
 		listeners,
@@ -18,7 +21,7 @@ const Column = ({ column }) => {
 	} = useSortable({ id: column._id, data: column });
 
 	const style = {
-		touchAction: 'none',
+	
 		transform: CSS.Translate.toString(transform),
 		transition,
 		opacity: isDragging ? 0.5 : undefined,

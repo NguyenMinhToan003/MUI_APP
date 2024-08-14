@@ -20,7 +20,7 @@ const Card = ({ card }) => {
 		isDragging,
 	} = useSortable({ id: card._id, data: card });
 	const style = {
-		touchAction: 'none',
+
 		transform: CSS.Translate.toString(transform),
 		transition,
 		opacity: isDragging ? 0.5 : undefined,
@@ -39,7 +39,6 @@ const Card = ({ card }) => {
 			sx={{
 				width: '100%',
 				overflow: 'unset',
-				boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				borderRadius: '5px',
 				paddingBottom: '0',
 				cursor: 'pointer',
