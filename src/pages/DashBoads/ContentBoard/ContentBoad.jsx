@@ -26,7 +26,7 @@ const DRAGG_TYPE = {
 	CARD: 'DRAGG_TYPE_CARD',
 };
 
-const ContentBoard = ({ board }) => {
+const ContentBoard = ({ board ,createNewColumn,createNewCard}) => {
 	const [columnsOrder, setColumnsOrder] = useState([]);
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
@@ -267,7 +267,9 @@ const ContentBoard = ({ board }) => {
 					paddingY: 1,
 					width: '100%',
 				}}>
-				<Columns columns={columnsOrder} />
+				<Columns columns={columnsOrder}
+					createNewColumn={createNewColumn} 
+					createNewCard={createNewCard}/>
 				<DragOverlay dropAnimation={handlerAnimation}>
 					{draggingType === null && undefined}
 					{draggingType === DRAGG_TYPE.COLUMN && (
