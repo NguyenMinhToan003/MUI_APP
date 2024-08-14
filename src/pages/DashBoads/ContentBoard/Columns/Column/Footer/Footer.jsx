@@ -8,18 +8,17 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { orange } from '@mui/material/colors';
 import { toast } from 'react-toastify';
-const Footer = (props) => {
+const Footer = ({columnId, createNewCard}) => {
 	const [addCardTitle, setAddCardtitle] = useState('');
 	const [statusFormCard, setStatusFormCard] = useState(false);
-	const handlerAddCard = () => {
+	const handlerAddCard = async () => {
 		if(addCardTitle.trim() === ''){
 			toast.error('Please enter card title');
 		}
 		else{
-			console.log(addCardTitle);
+			await createNewCard({title:addCardTitle,columnId});
 			setAddCardtitle('');
 			setStatusFormCard(!statusFormCard);
-			toast.success('Add card success');
 		}
 	}
 	return (

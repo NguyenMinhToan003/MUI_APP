@@ -7,7 +7,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 
-const Column = ({ column }) => {
+const Column = ({ column, createNewCard}) => {
 
 	let cardOrder = mapOrder(column?.cards, column?.cardOrderIds, 'id');
 
@@ -62,7 +62,7 @@ const Column = ({ column }) => {
 					}}>
 					<Cards cards={cardOrder} />
 				</Box>
-				<Footer />
+				<Footer columnId={column._id} createNewCard={createNewCard} />
 			</Box>
 		</Box>
 	);

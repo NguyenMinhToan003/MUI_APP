@@ -11,19 +11,18 @@ import { useState } from 'react';
 import { green, orange } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-const Columns = ({ columns }) => {
+const Columns = ({ columns, createNewColumn, createNewCard}) => {
 	//*item is the column id ex:[ 'column-1', 'column-2', 'column-3'] not the column object
 	const [addColumnTitle, setAddColumnTitle] = useState('');	
 	const [statusFormColumn,setStatusFormColumn] = useState(false);
-	const handlerAddColumn = () => {
+	const handlerAddColumn = async() => {
 		if(addColumnTitle.trim() === ''){
 			toast.error('Please enter column title');
 		}
 		else{
-			console.log(addColumnTitle);
+			await createNewColumn({title:addColumnTitle});
 			setAddColumnTitle('');
 			setStatusFormColumn(!statusFormColumn);
-			toast.success('Add column success');
 		}
 	}
 
@@ -44,7 +43,7 @@ const Columns = ({ columns }) => {
 						paddingLeft: '5px',
 					}}>
 					{columns.map((column) => (
-						<Column key={column._id} column={column} />
+						<Column key={column._id} column={column} createNewCard={createNewCard} />
 					))}
 					<Box sx={{
 								minWidth: '360px',maxWidth: '360px',borderRadius: '8px',					
@@ -67,8 +66,7 @@ const Columns = ({ columns }) => {
 							<Box sx={{height: '100%', width: '100%', display:'flex',alignItems:'center',justifyContent:'space-around',paddingRight:1, boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px'}}>
 								<TextField size='small' sx={{height: '100%',padding:1}} onChange={(event)=>setAddColumnTitle(event.target.value)}/>
 								<Button variant='contained'
-								 sx={{backgroundColor:green[500],height: '100%',padding:1,":hover":{backgroundColor:orange[500]}}} onClick={()=>handlerAddColumn()} >Add</Button>
-								<CloseIcon onClick={()=>setStatusFormColumn(!statusFormColumn)} 
+								 sx={{backgroundColor:green[500],height: '100%',padding:1,":hover":{backgroundColor:orange[500]}}} onClick={()=>handlerAddColumn()} >Add</Button>								<CloseIcon onClick={()=>setStatusFormColumn(!statusFormColumn)} 
 								sx={{cursor:'pointer',color:orange[500]}}/>
 							
 							</Box>
