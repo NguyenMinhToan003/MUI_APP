@@ -2,14 +2,13 @@ import Box from '@mui/material/Box';
 import Cards from './Cards/Cards';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import mapOrder from '../../../../../utils/Mapping';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 
 const Column = ({ column, createNewCard}) => {
 
-	let cardOrder = mapOrder(column?.cards, column?.cardOrderIds, 'id');
+	let cardOrder = column.cards;
 
 	const {
 		attributes,
@@ -60,7 +59,7 @@ const Column = ({ column, createNewCard}) => {
 						},
 						maxHeight: (theme) => theme.trello.columnContentHeight,
 					}}>
-					<Cards cards={cardOrder} />
+					<Cards cards={cardOrder}  />
 				</Box>
 				<Footer columnId={column._id} createNewCard={createNewCard} />
 			</Box>

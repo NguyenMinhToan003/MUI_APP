@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Columns from './Columns/Columns';
-import mapOrder from '../../../utils/Mapping';
 import { cloneDeep, isEmpty } from 'lodash';
 import {
 	DndContext,
@@ -26,7 +25,7 @@ const DRAGG_TYPE = {
 	CARD: 'DRAGG_TYPE_CARD',
 };
 
-const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns}) => {
+const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns,updateMoveCardTheSameColumn}) => {
 	const [columnsOrder, setColumnsOrder] = useState([]);
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
@@ -50,7 +49,7 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 	const mouseSensor = useSensor(MouseSensor,{activationConstraint: {delay:250,tolerance:500 }},);
 	const sensors = useSensors( mouseSensor, touchSensor);
 	useEffect(() => {
-		setColumnsOrder(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
+		setColumnsOrder(board.columns);
 	}, [board]);
 	// ham tinh toan khi keo tha card giua hai column khac nhau
 	const setColumnsOrderWhhenDraggingBewteenColumn = (
@@ -145,7 +144,7 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 			overItems
 		);
 	};
-	const handlerDragEnd = async(event) => {
+	const handlerDragEnd = async (event) => {
 		const { active, over } = event;
 		if (!over) return;
 		if (active.id === over.id) return;
@@ -170,12 +169,14 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 			);
 			// neu keo qua va tha vao cung 1 column
 			if (activeColumn?._id === overColumn?._id) {
+				console.log("keo trong cung mot column")
 				// thay doi vi tri card trong column (Bien luu array card da thay doi khi keo tha )
 				const newCardOrder = arrayMove(
 					overColumn.cards,
 					activeCardIndex,
 					overCardIndex
 				);
+				const newCardOrderIds = newCardOrder.map((i) => i._id);
 				// cap nhat stateColumnOrder
 				setColumnsOrder((prevColumns) => {
 					const nextColumns = cloneDeep(prevColumns);
@@ -183,10 +184,14 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 						(i) => i._id === overColumn._id
 					);
 					nextOverColumn.cards = newCardOrder;
-					nextOverColumn.columnOrderIds = newCardOrder.map((i) => i._id);
+					nextOverColumn.columnOrderIds = newCardOrderIds;
 					return nextColumns;
 				});
+				await updateMoveCardTheSameColumn(overColumn._id,newCardOrder,newCardOrderIds);
+				
 			}
+
+
 			// neu keo qua va tha vao khac column
 			if (activeColumn?._id !== overColumn?._id) {
 				const overItems = overColumn?.cards;
