@@ -5,7 +5,7 @@ import ContentBoard from './ContentBoard/ContentBoad'; // Corrected import
 import { fetchDataBoard } from "../../apis";
 import { useEffect, useState } from 'react';
 import data from "../../apis/mock-data"
-import { createColumn, createCard } from '../../apis';
+import { createColumn, createCard, updateBoard} from '../../apis';
 import { toast } from 'react-toastify';
 import {createPlaceholderCard} from '../../utils/Function'
 import { isEmpty } from 'lodash';
@@ -49,7 +49,12 @@ const Dashboard = () => {
 			toast.success('Create card successfully');
 		fetchData();
 	}
-
+	const updateMoveColumns = async (data) => {
+		const columnOrderIds = data.map((i) => i._id);
+		const response = await updateBoard(board._id, {columnOrderIds});
+		if(response?._id)
+			toast.success('Update board successfully');
+	}
 	return (
 		<>
 			<Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
@@ -58,6 +63,7 @@ const Dashboard = () => {
 				<ContentBoard board={board} 
 					createNewColumn={createNewColumn} 
 					createNewCard={createNewCard}
+					updateMoveColumns={updateMoveColumns}
 				/>
 			</Container>
 		</>
