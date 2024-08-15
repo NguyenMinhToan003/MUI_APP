@@ -1,24 +1,28 @@
 import axios from "axios";
 // board APIs
-export const fetchDataBoard = async (id) => { 
+export const fetchDataBoardAPI = async (id) => { 
   const response = await axios.get(`http://localhost:4000/v1/dashboards/${id}`);
   return response.data
 }
-export const updateBoard = async (id,data) => { 
+export const updateBoardAPI = async (id,data) => { 
   const response = await axios.put(`http://localhost:4000/v1/dashboards/${id}`,data);
   return response.data
 }
 
 
 // column APIs
-export const createColumn = async (data) => { 
+export const createColumnAPI = async (data) => { 
   const response = await axios.post(`http://localhost:4000/v1/columns`,data);
+  return response.data
+}
+export const updateColumnAPI = async (id,data) => {
+  const response = await axios.put(`http://localhost:4000/v1/columns/${id}`,data);
   return response.data
 }
 
 
 // card APIs
-export const createCard = async (data) => { 
+export const createCardAPI = async (data) => { 
   const response = await axios.post(`http://localhost:4000/v1/cards`,data);
   return response.data
 }
