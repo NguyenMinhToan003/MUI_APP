@@ -26,7 +26,7 @@ const DRAGG_TYPE = {
 	CARD: 'DRAGG_TYPE_CARD',
 };
 
-const ContentBoard = ({ board ,createNewColumn,createNewCard}) => {
+const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns}) => {
 	const [columnsOrder, setColumnsOrder] = useState([]);
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
@@ -145,7 +145,7 @@ const ContentBoard = ({ board ,createNewColumn,createNewCard}) => {
 			overItems
 		);
 	};
-	const handlerDragEnd = (event) => {
+	const handlerDragEnd = async(event) => {
 		const { active, over } = event;
 		if (!over) return;
 		if (active.id === over.id) return;
@@ -153,8 +153,8 @@ const ContentBoard = ({ board ,createNewColumn,createNewCard}) => {
 			const activeIndex = columnsOrder.findIndex((i) => i._id === active.id);
 			const overIndex = columnsOrder.findIndex((i) => i._id === over.id);
 			const newColumnOrder = arrayMove(columnsOrder, activeIndex, overIndex);
-			// const newColumnOrderIds = newColumnOrder.map((i) => i._id);// dang de danh
-			setColumnsOrder(newColumnOrder);
+			setColumnsOrder(newColumnOrder);	
+			await updateMoveColumns(newColumnOrder);
 		} else if (draggingType === DRAGG_TYPE.CARD) {
 			// phai su dung oldColumnWhenDragging ( khong dung active.columnId vi no da thay doi khi keo qua column khac <ham handlerDragOver>)
 			if (oldColumnWhenDragging?._id === over.id) return;
