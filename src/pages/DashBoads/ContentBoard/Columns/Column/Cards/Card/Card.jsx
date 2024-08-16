@@ -24,7 +24,7 @@ const Card = ({ card }) => {
 		transform: CSS.Translate.toString(transform),
 		transition,
 		opacity: isDragging ? 0.5 : undefined,
-		border: isDragging ? '2px solid #06994C' : 'none',
+		border: isDragging ? '1px solid #06994C' : 'none',
 	};
 	const shouldShowActions =
 		card?.memberIds?.length ||
@@ -44,20 +44,25 @@ const Card = ({ card }) => {
 				cursor: 'pointer',
 				opacity: card?.FE_PLACEHOLDER_CARD ? '0' : '1',
 				visibility: card?.FE_PLACEHOLDER_CARD ? 'hidden' : 'visible',
-				boxShadow: card?.FE_PLACEHOLDER_CARD ? 'none' : 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
+				boxShadow: card?.FE_PLACEHOLDER_CARD ? 'none' : 'rgba(149, 157, 165, 0.2) 0px 8px 24px;',
+				
 			}}>
 			{card.cover && <CardMedia sx={{ height: 140 }} image={card.cover} />}
-			<CardContent >
+			<CardContent sx={{'&:hover':{border: '1px solid #06994C'},borderRadius: '5px'}} >
 				<Typography
 					sx={{
 						color: 'primary.main', fontSize: '14px', fontWeight: 'bold',
 					}}>
 					{card.title}
 				</Typography>
-				<Typography
-					sx={{ fontSize: '10px', paddingLeft:1, paddingTop:1}}>
-					{card.description}
-				</Typography>
+				{
+					card.description && (
+						<Typography
+							sx={{ fontSize: '10px', paddingLeft:1, paddingTop:1}}>
+							{card.description}
+						</Typography>
+					)
+				}
 			</CardContent>
 			{!!shouldShowActions && (
 				<CardActions

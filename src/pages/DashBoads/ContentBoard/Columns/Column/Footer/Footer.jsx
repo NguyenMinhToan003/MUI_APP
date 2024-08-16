@@ -8,9 +8,8 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { orange } from '@mui/material/colors';
 import { toast } from 'react-toastify';
-const Footer = ({columnId, createNewCard}) => {
+const Footer = ({columnId, createNewCard, setStatusFormCard, statusFormCard}) => {
 	const [addCardTitle, setAddCardtitle] = useState('');
-	const [statusFormCard, setStatusFormCard] = useState(false);
 	const handlerAddCard = async () => {
 		if(addCardTitle.trim() === ''){
 			toast.error('Please enter card title');
@@ -46,7 +45,7 @@ const Footer = ({columnId, createNewCard}) => {
 			
 			:
 			<Box sx={{display:'flex',justifyContent:'center',alignItems:'center',gap:1, height:'100%',width:'100%'}}>
-				<TextField  data-no-dnd="true" size="small" label="Add card" sx={{width:'100%', height:'100%'}} onChange={(event)=>setAddCardtitle(event.target.value)}/>
+				<TextField autoFocus  data-no-dnd="true" size="small" label="Add card" sx={{width:'100%', height:'100%'}} onChange={(event)=>setAddCardtitle(event.target.value)}/>
 				<Button variant='contained' data-no-dnd="true" sx={{height:'100%'}} onClick={()=>handlerAddCard()}>Add</Button>
 			</Box>
 			}

@@ -4,12 +4,12 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
 
 
 const Column = ({ column, createNewCard}) => {
-
+	const [statusFormCard, setStatusFormCard] = useState(false);
 	let cardOrder = column.cards;
-
 	const {
 		attributes,
 		listeners,
@@ -40,7 +40,7 @@ const Column = ({ column, createNewCard}) => {
 					backgroundColor: 'secondary.main',
 					boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				}}>
-				<Header title={column.title} />
+				<Header title={column.title} setStatusFormCard={setStatusFormCard} statusFormCard={statusFormCard}/>
 				<Box
 					sx={{
 						display: 'flex',
@@ -61,7 +61,7 @@ const Column = ({ column, createNewCard}) => {
 					}}>
 					<Cards cards={cardOrder}  />
 				</Box>
-				<Footer columnId={column._id} createNewCard={createNewCard} />
+				<Footer columnId={column._id} createNewCard={createNewCard} setStatusFormCard={setStatusFormCard} statusFormCard={statusFormCard}/>
 			</Box>
 		</Box>
 	);
