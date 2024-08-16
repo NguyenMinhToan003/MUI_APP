@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { green, orange } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-const Columns = ({ columns, createNewColumn, createNewCard}) => {
+const Columns = ({ columns, createNewColumn, createNewCard, deleteColumn}) => {
 	//*item is the column id ex:[ 'column-1', 'column-2', 'column-3'] not the column object
 	const [addColumnTitle, setAddColumnTitle] = useState('');	
 	const [statusFormColumn,setStatusFormColumn] = useState(false);
@@ -43,7 +43,7 @@ const Columns = ({ columns, createNewColumn, createNewCard}) => {
 						paddingLeft: '5px',
 					}}>
 					{columns.map((column) => (
-						<Column key={column._id} column={column} createNewCard={createNewCard} />
+						<Column key={column._id} column={column} createNewCard={createNewCard} deleteColumn={deleteColumn}/>
 					))}
 					<Box sx={{
 								minWidth: '360px',maxWidth: '360px',borderRadius: '8px',					
