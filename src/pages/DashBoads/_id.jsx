@@ -5,7 +5,7 @@ import ContentBoard from './ContentBoard/ContentBoad'; // Corrected import
 import { fetchDataBoardAPI } from "../../apis";
 import { useEffect, useState } from 'react';
 import data from "../../apis/mock-data"
-import { createColumnAPI, createCardAPI, updateBoardAPI, updateColumnAPI,moveCardToDifferentColumnsAPI} from '../../apis';
+import { createColumnAPI, createCardAPI, updateBoardAPI, updateColumnAPI,moveCardToDifferentColumnsAPI,deleteColumnAPI} from '../../apis';
 import { toast } from 'react-toastify';
 import {createPlaceholderCard} from '../../utils/Function'
 import { isEmpty } from 'lodash';
@@ -18,7 +18,7 @@ const Dashboard = () => {
 	const [board, setBoard] = useState(null);
 
 	const fetchData = async () => {
-		const id = '66bc579f0d3b3ebd4ae745bb';
+		const id = '66beef4cf1e35a7c3ebd1e2a';
 		const data = await fetchDataBoardAPI(id);
 		data.columns = mapOrder(data.columns, data.columnOrderIds, '_id');
 		data.columns.forEach((column) => {
@@ -101,6 +101,15 @@ const Dashboard = () => {
 		if(response)
 			toast.success('move card successfully');
 	}
+	const deleteColumn = async (columnId) => {
+		const updateBoard = {...board};
+		updateBoard.columns = updateBoard.columns.filter((i) => i._id !== columnId);
+		const columnOrderIds = updateBoard.columns.map((i) => i._id);
+		setBoard({...updateBoard, columnOrderIds});
+		const response = await deleteColumnAPI(columnId);
+		if(response)
+			toast.success(response?.message);
+	}
 
 	if(!board) return (
     <Box sx={{ display: 'flex',justifyContent:'center',alignItems:'center',height:'100vh',
@@ -120,6 +129,7 @@ const Dashboard = () => {
 					updateMoveColumns={updateMoveColumns}
 					updateMoveCardTheSameColumn={updateMoveCardTheSameColumn}
 					updateMoveCardDifferentColumn={updateMoveCardDifferentColumn}
+					deleteColumn={deleteColumn}
 				/>
 			</Container>
 		</>

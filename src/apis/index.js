@@ -24,6 +24,10 @@ export const updateColumnAPI = async (id,data) => {
   const response = await axios.put(`http://localhost:4000/v1/columns/${id}`,data);
   return response.data
 }
+export const deleteColumnAPI = async (columnId) => {
+  const response = await axios.delete(`http://localhost:4000/v1/columns/${columnId}`);
+  return response.data
+}
 
 
 // card APIs

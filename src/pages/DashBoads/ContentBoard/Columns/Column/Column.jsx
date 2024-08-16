@@ -7,7 +7,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 
 
-const Column = ({ column, createNewCard}) => {
+const Column = ({ column, createNewCard ,deleteColumn}) => {
 	const [statusFormCard, setStatusFormCard] = useState(false);
 	let cardOrder = column.cards;
 	const {
@@ -40,7 +40,7 @@ const Column = ({ column, createNewCard}) => {
 					backgroundColor: 'secondary.main',
 					boxShadow: 'rgba(149, 157, 165, 0.2) 0px 4px 12px 0px',
 				}}>
-				<Header title={column.title} setStatusFormCard={setStatusFormCard} statusFormCard={statusFormCard}/>
+				<Header title={column.title} setStatusFormCard={setStatusFormCard} statusFormCard={statusFormCard} columnId={column._id} deleteColumn={deleteColumn}/>
 				<Box
 					sx={{
 						display: 'flex',

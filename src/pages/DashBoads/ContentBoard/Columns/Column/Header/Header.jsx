@@ -13,8 +13,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Divider from '@mui/material/Divider';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import { useState } from 'react';
+import { useConfirm } from 'material-ui-confirm';
+import { toast } from 'react-toastify';
+const Header = ({ title ,setStatusFormCard, statusFormCard,columnId, deleteColumn}) => {
+	const confirm = useConfirm();
+	const handleDeleteColumn = () => {
+    confirm({
+			title:"Confirm delete column",
+			description: `Are you sure you want to delete this ${title} ? `,
 
-const Header = ({ title ,setStatusFormCard, statusFormCard}) => {
+		})
+      .then(() => {
+				deleteColumn(columnId);
+			})
+      .catch(() => {});
+  };
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -45,6 +58,7 @@ const Header = ({ title ,setStatusFormCard, statusFormCard}) => {
 							fontSize: '24px',
 							width: '24px',
 							height: '24px',
+							cursor: 'pointer',
 						}}
 						id='basic-button-column'
 						aria-controls={open ? 'basic-menu-column' : undefined}
@@ -97,7 +111,7 @@ const Header = ({ title ,setStatusFormCard, statusFormCard}) => {
 							</ListItemIcon>
 							<ListItemText>Add Card</ListItemText>
 						</MenuItem>
-						<MenuItem onClick={handleClose} sx={{'&:hover':{color:'error.main' ,'& .delete-icon':{ color:'error.main' }}}}>
+						<MenuItem onClick={(()=>{handleClose; handleDeleteColumn()})} sx={{'&:hover':{color:'error.main' ,'& .delete-icon':{ color:'error.main' }}}}>
 							<ListItemIcon>
 								<DeleteIcon fontSize='small' className='delete-icon'/>
 							</ListItemIcon>

@@ -8,8 +8,10 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { orange } from '@mui/material/colors';
 import { toast } from 'react-toastify';
+
 const Footer = ({columnId, createNewCard, setStatusFormCard, statusFormCard}) => {
 	const [addCardTitle, setAddCardtitle] = useState('');
+	
 	const handlerAddCard = async () => {
 		if(addCardTitle.trim() === ''){
 			toast.error('Please enter card title');
