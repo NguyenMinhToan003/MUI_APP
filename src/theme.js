@@ -20,7 +20,7 @@ const theme = extendTheme({
 					more: '#024dc5',
 				},
 				secondary: {
-					main: '#dedced',
+					main: '#f2f2ff',
 				},
 				error: {
 					main: red[500],

@@ -8,6 +8,11 @@ export const updateBoardAPI = async (id,data) => {
   const response = await axios.put(`http://localhost:4000/v1/dashboards/${id}`,data);
   return response.data
 }
+export const moveCardToDifferentColumnsAPI = async (data) => { 
+  const response = await axios.put(`http://localhost:4000/v1/dashboards/supports/moving_card`,data);
+  return response.data
+}
+
 
 
 // column APIs

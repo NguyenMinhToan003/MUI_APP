@@ -9,9 +9,12 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Divider from '@mui/material/Divider';
+import AddCardIcon from '@mui/icons-material/AddCard';
 import { useState } from 'react';
 
-const Header = ({ title }) => {
+const Header = ({ title ,setStatusFormCard, statusFormCard}) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -55,9 +58,11 @@ const Header = ({ title }) => {
 						anchorEl={anchorEl}
 						open={open}
 						onClose={handleClose}
+						onClick={handleClose}
 						MenuListProps={{
 							'aria-labelledby': 'basic-button-column',
 						}}>
+						
 						<MenuItem onClick={handleClose} sx={{ width: '200px' }}>
 							<ListItemIcon>
 								<ContentCopy fontSize='small' />
@@ -84,6 +89,20 @@ const Header = ({ title }) => {
 							<Typography variant='body2' color='text.secondary'>
 								⌘X
 							</Typography>
+						</MenuItem>
+						<Divider />
+						<MenuItem onClick={()=>{handleClose; setStatusFormCard(true)}} sx={{'&:hover':{color:'primary.main' ,'& .add-card-icon':{ color:'primary.main' }}}} >
+							<ListItemIcon>
+								<AddCardIcon className='add-card-icon' fontSize='small' />
+							</ListItemIcon>
+							<ListItemText>Add Card</ListItemText>
+						</MenuItem>
+						<MenuItem onClick={handleClose} sx={{'&:hover':{color:'error.main' ,'& .delete-icon':{ color:'error.main' }}}}>
+							<ListItemIcon>
+								<DeleteIcon fontSize='small' className='delete-icon'/>
+							</ListItemIcon>
+							<ListItemText>Remove</ListItemText>
+						
 						</MenuItem>
 					</Menu>
 				</Box>

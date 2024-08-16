@@ -5,7 +5,7 @@ import ContentBoard from './ContentBoard/ContentBoad'; // Corrected import
 import { fetchDataBoardAPI } from "../../apis";
 import { useEffect, useState } from 'react';
 import data from "../../apis/mock-data"
-import { createColumnAPI, createCardAPI, updateBoardAPI, updateColumnAPI} from '../../apis';
+import { createColumnAPI, createCardAPI, updateBoardAPI, updateColumnAPI,moveCardToDifferentColumnsAPI} from '../../apis';
 import { toast } from 'react-toastify';
 import {createPlaceholderCard} from '../../utils/Function'
 import { isEmpty } from 'lodash';
@@ -13,6 +13,7 @@ import mapOrder from "../../utils/Mapping"
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import {isEqual} from 'lodash'
 const Dashboard = () => { 
 	const [board, setBoard] = useState(null);
 
@@ -70,11 +71,34 @@ const Dashboard = () => {
 		console.log(columnId,cards,cardOrderIds)
 		const updateBoard = {...board};
 		const column = updateBoard.columns.find((i) => i._id === columnId);
+		if(isEqual(column.cardOrderIds,cardOrderIds)) return;
 		column.cards = cards;
 		column.cardOrderIds = cardOrderIds;
 		setBoard(updateBoard);
 		const response = await updateColumnAPI(columnId, {cardOrderIds});		
 		if(response?._id)
+			toast.success('move card successfully');
+	}
+	const updateMoveCardDifferentColumn = async (cardId, prevColumnId, nextColumnId,columns) => {
+		const updateBoard ={...board};
+		updateBoard.columns = columns;
+		const columnOrderIds = columns.map((i) => i._id);
+		setBoard({...updateBoard, columnOrderIds});
+		console.log("columns",columns)
+
+		
+		let prevCardOrderIds = columns.find((i) => i._id === prevColumnId).cardOrderIds;
+		if(prevCardOrderIds[0].includes('placeholder-card'))
+			prevCardOrderIds=[];
+		let nextCardOrderIds = columns.find((i) => i._id === nextColumnId).cardOrderIds;
+		const response = await moveCardToDifferentColumnsAPI({
+			cardId,
+			prevColumnId,
+			prevCardOrderIds,
+			nextColumnId,
+			nextCardOrderIds,
+		});
+		if(response)
 			toast.success('move card successfully');
 	}
 
@@ -95,6 +119,7 @@ const Dashboard = () => {
 					createNewCard={createNewCard}
 					updateMoveColumns={updateMoveColumns}
 					updateMoveCardTheSameColumn={updateMoveCardTheSameColumn}
+					updateMoveCardDifferentColumn={updateMoveCardDifferentColumn}
 				/>
 			</Container>
 		</>

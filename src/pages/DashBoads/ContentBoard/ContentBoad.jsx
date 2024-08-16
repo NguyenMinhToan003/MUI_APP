@@ -25,7 +25,7 @@ const DRAGG_TYPE = {
 	CARD: 'DRAGG_TYPE_CARD',
 };
 
-const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns,updateMoveCardTheSameColumn}) => {
+const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns,updateMoveCardTheSameColumn,updateMoveCardDifferentColumn}) => {
 	const [columnsOrder, setColumnsOrder] = useState([]);
 	const [draggingData, setDraggingData] = useState(null);
 	const [draggingType, setDraggingType] = useState(null);
@@ -49,18 +49,21 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 	const mouseSensor = useSensor(MouseSensor,{activationConstraint: {delay:250,tolerance:500 }},);
 	const sensors = useSensors( mouseSensor, touchSensor);
 	useEffect(() => {
+		console.log('board', board);
 		setColumnsOrder(board.columns);
+		
 	}, [board]);
 	// ham tinh toan khi keo tha card giua hai column khac nhau
-	const setColumnsOrderWhhenDraggingBewteenColumn = (
+	const setColumnsOrderWhhenDraggingBewteenColumn =async (
 		active,
 		over,
-		activeColumn,
-		overColumn,
-		overCardIndex,
-		overItems
+		activeColumn,// column keo qua
+		overColumn,// column tha vao
+		overCardIndex,// vi tri card duoc tha vao trong column
+		overItems,// danh sach card trong column tha vao
+		triggerFrom
 	) => {
-		setColumnsOrder((prevColumns) => {
+		setColumnsOrder( (prevColumns) => {
 			const isBelowOverItem =
 				active.rect.current.translated &&
 				active.rect.current.translated.top > over.rect.top + over.rect.height;
@@ -85,7 +88,7 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 				);
 				if (isEmpty(nextActiveColumn.cards))
 					nextActiveColumn.cards = [createPlaceholderCard(nextActiveColumn)];
-				nextActiveColumn.columnOrderIds = nextActiveColumn.cards.map(
+					nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
 					(i) => i._id
 				);
 			}
@@ -104,11 +107,19 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 				nextOverColumn.cards = nextOverColumn.cards.filter(
 					(i) => !i.FE_PLACEHOLDER_CARD
 				);
-				nextOverColumn.columnOrderIds = nextOverColumn.cards.map((i) => i._id);
+				nextOverColumn.cardOrderIds = nextOverColumn.cards.map((i) => i._id);
 			}
-			console.log(nextColumns);
+			if(triggerFrom === 'handlerDragEnd'){
+				updateMoveCardDifferentColumn(
+					draggingId,
+					oldColumnWhenDragging._id,
+					nextOverColumn._id,
+					nextColumns
+				);
+			}
 			return nextColumns;
 		});
+		
 	};
 	// xu ly khi keo ra (card/column) , xac dinh kieu (card/column), data, idActive cua phan tu dang keo ra va column cu khi keo ra
 	const handlerDragStart = (event) => {
@@ -141,13 +152,14 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 			activeColumn,
 			overColumn,
 			overCardIndex,
-			overItems
+			overItems,
+			'handlerDragOver'
 		);
 	};
 	const handlerDragEnd = async (event) => {
 		const { active, over } = event;
 		if (!over) return;
-		if (active.id === over.id) return;
+		if (oldColumnWhenDragging?.id === over.id) return;
 		if (draggingType === DRAGG_TYPE.COLUMN) {
 			const activeIndex = columnsOrder.findIndex((i) => i._id === active.id);
 			const overIndex = columnsOrder.findIndex((i) => i._id === over.id);
@@ -184,7 +196,7 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 						(i) => i._id === overColumn._id
 					);
 					nextOverColumn.cards = newCardOrder;
-					nextOverColumn.columnOrderIds = newCardOrderIds;
+					nextOverColumn.cardOrderIds = newCardOrderIds;
 					return nextColumns;
 				});
 				await updateMoveCardTheSameColumn(overColumn._id,newCardOrder,newCardOrderIds);
@@ -201,7 +213,8 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 					activeColumn,
 					overColumn,
 					overCardIndex,
-					overItems
+					overItems,
+					'handlerDragEnd'
 				);
 			}
 		}
