@@ -64,8 +64,8 @@ const Dashboard = () => {
 		const columnOrderIds = columns.map((i) => i._id);
 		setBoard({...updateBoard, columnOrderIds});
 		const response = await updateBoardAPI(board._id, {columnOrderIds});
-		if(response?._id)
-			toast.success('move column successfully');
+		// if(response?._id)
+		// 	toast.success('move column successfully');
 	}
 	const updateMoveCardTheSameColumn = async (columnId,cards,cardOrderIds) => {
 		console.log(columnId,cards,cardOrderIds)
@@ -76,8 +76,8 @@ const Dashboard = () => {
 		column.cardOrderIds = cardOrderIds;
 		setBoard(updateBoard);
 		const response = await updateColumnAPI(columnId, {cardOrderIds});		
-		if(response?._id)
-			toast.success('move card successfully');
+		// if(response?._id)
+		// 	toast.success('move card successfully');
 	}
 	const updateMoveCardDifferentColumn = async (cardId, prevColumnId, nextColumnId,columns) => {
 		const updateBoard ={...board};
@@ -98,8 +98,8 @@ const Dashboard = () => {
 			nextColumnId,
 			nextCardOrderIds,
 		});
-		if(response)
-			toast.success('move card successfully');
+		// if(response)
+		// 	toast.success('move card successfully');
 	}
 	const deleteColumn = async (columnId) => {
 		const updateBoard = {...board};

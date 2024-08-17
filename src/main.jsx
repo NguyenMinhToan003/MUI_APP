@@ -15,7 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 	// <React.StrictMode>
 		<CssVarsProvider theme={theme}>
 		  <ConfirmProvider defaultOptions={{
-				confirmationButtonProps: { autoFocus: true },
 				// css
 				dialogProps: { maxWidth: 'xs' },
 				// prevent the dialog from closing
