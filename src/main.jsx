@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ConfirmProvider } from 'material-ui-confirm';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	// <React.StrictMode>
 		<CssVarsProvider theme={theme}>
 		  <ConfirmProvider defaultOptions={{
 				// css
@@ -41,6 +40,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 				/>
 			</ConfirmProvider>
 		</CssVarsProvider>
-
-	// </React.StrictMode>
 );

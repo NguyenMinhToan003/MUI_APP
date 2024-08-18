@@ -30,7 +30,6 @@ const Dashboard = () => {
 				column.cards = mapOrder(column.cards, column.cardOrderIds, '_id');
 			}
 		});
-		console.log(data)
 		setBoard(data); 
 	};
 	useEffect(() => {
@@ -68,7 +67,6 @@ const Dashboard = () => {
 		// 	toast.success('move column successfully');
 	}
 	const updateMoveCardTheSameColumn = async (columnId,cards,cardOrderIds) => {
-		console.log(columnId,cards,cardOrderIds)
 		const updateBoard = {...board};
 		const column = updateBoard.columns.find((i) => i._id === columnId);
 		if(isEqual(column.cardOrderIds,cardOrderIds)) return;
@@ -84,9 +82,6 @@ const Dashboard = () => {
 		updateBoard.columns = columns;
 		const columnOrderIds = columns.map((i) => i._id);
 		setBoard({...updateBoard, columnOrderIds});
-		console.log("columns",columns)
-
-		
 		let prevCardOrderIds = columns.find((i) => i._id === prevColumnId).cardOrderIds;
 		if(prevCardOrderIds[0].includes('placeholder-card'))
 			prevCardOrderIds=[];
