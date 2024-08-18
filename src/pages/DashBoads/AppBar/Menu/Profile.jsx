@@ -9,6 +9,7 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Link from '@mui/material/Link';
 const Profile = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
@@ -43,13 +44,16 @@ const Profile = () => {
 					'aria-labelledby': 'basic-button-profile',
 				}}>
 				<MenuItem onClick={handleClose} sx={{ display: 'flex', gap: 2 }}>
-					<Avatar
-						sx={{ width: 32, height: 32, cursor: 'pointer' }}
-						alt='Avatar'
-						src='https://avatars.githubusercontent.com/u/117341351?s=400&u=895161a6128008eb8d79b16760c7d7fa5cf0a20f&v=4'
-					/>
-					Profile
+					<Link href='https://github.com/NguyenMinhToan003'>
+						<Avatar
+							sx={{ width: 32, height: 32, cursor: 'pointer' }}
+							alt='Avatar'
+							src='https://avatars.githubusercontent.com/u/117341351?s=400&u=895161a6128008eb8d79b16760c7d7fa5cf0a20f&v=4'
+						/>
+						Profile
+					</Link>
 				</MenuItem>
+			
 
 				<Divider />
 				<MenuItem onClick={handleClose}>

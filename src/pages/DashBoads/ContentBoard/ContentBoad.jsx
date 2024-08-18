@@ -49,7 +49,6 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 	const mouseSensor = useSensor(MouseSensor,{activationConstraint: {delay:250,tolerance:500 }},);
 	const sensors = useSensors( mouseSensor, touchSensor);
 	useEffect(() => {
-		console.log('board', board);
 		setColumnsOrder(board.columns);
 		
 	}, [board]);
@@ -181,7 +180,6 @@ const ContentBoard = ({ board, createNewColumn, createNewCard, updateMoveColumns
 			);
 			// neu keo qua va tha vao cung 1 column
 			if (activeColumn?._id === overColumn?._id) {
-				console.log("keo trong cung mot column")
 				// thay doi vi tri card trong column (Bien luu array card da thay doi khi keo tha )
 				const newCardOrder = arrayMove(
 					overColumn.cards,
